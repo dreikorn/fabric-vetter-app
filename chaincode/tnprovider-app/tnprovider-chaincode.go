@@ -29,13 +29,12 @@ import (
 type SmartContract struct {
 }
 
-/* Define Enterprise structure, with 4 properties.
+/* Define Vetter structure, with 3 properties.
 Structure tags are used by encoding/json library
 */
-type Enterprise struct {
+type TnProvider struct {
 	Name string `json:"name"`
 	Uuid string `json:"uuid"`
-	VettedBy string `json:"vettedBy"`
 	PublicKey string `json:"publicKey"`
 }
 
@@ -59,17 +58,17 @@ func (s *SmartContract) queryItem(APIstub shim.ChaincodeStubInterface, args []st
 
 
 /*
- * The recordEnterprise method *
-Can be used to add new Enterprises to the DLT.s
+ * The recordTnProvider method *
+Can be used to add new TnProviders to the DLT.s
 */
-func (s *SmartContract) recordEnterprise(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) recordTnProvider(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	var newEnterprise = Enterprise{ Name: args[1], Uuid: args[2], VettedBy: "", PublicKey: args[3] }
+	var newTnProvider = TnProvider{ Name: args[1], Uuid: args[2], PublicKey: args[3] }
 
-	newEnterpriseAsBytes, _ := json.Marshal(newEnterprise)
-	err := APIstub.PutState(args[0], newEnterpriseAsBytes)
+	newTnProviderAsBytes, _ := json.Marshal(newTnProvider)
+	err := APIstub.PutState(args[0], newTnProviderAsBytes)
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Failed to record new Enterprise: %s", args[0]))
+		return shim.Error(fmt.Sprintf("Failed to record new TnProvider: %s", args[0]))
 	}
 
 	return shim.Success(nil)
@@ -99,8 +98,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.queryItem(APIstub, args)
 	} else if function == "initLedger" {
 		return s.initLedger(APIstub)
-	} else if function == "recordEnterprise" {
-		return s.recordEnterprise(APIstub, args)
+	} else if function == "recordTnProvider" {
+		return s.recordTnProvider(APIstub, args)
 	} else if function == "queryAllItems" {
 		return s.queryAllItems(APIstub)
 	}
@@ -111,24 +110,23 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 
 /*
  * The initLedger method *
-Will add test data (5 Enterprises)to our network
+Will add test data (5 TnProviders)to our network
 */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
-
-	enterprise := []Enterprise{
-		Enterprise{Name: "Exito", Uuid: uuid.New().String(), VettedBy: "1", PublicKey: ""},
-		Enterprise{Name: "Carulla", Uuid: uuid.New().String(), VettedBy: "2", PublicKey: ""},
-		Enterprise{Name: "D1", Uuid: uuid.New().String(), VettedBy: "3", PublicKey: ""},
-		Enterprise{Name: "JustoYBueno", Uuid: uuid.New().String(), VettedBy: "4", PublicKey: ""},
-		Enterprise{Name: "Jumbo", Uuid: uuid.New().String(), VettedBy: "5", PublicKey: ""},
+	tnProvider := []TnProvider{
+		TnProvider{Name: "America Movil", Uuid: uuid.New().String(), PublicKey: ""},
+		TnProvider{Name: "Telefonica", Uuid: uuid.New().String(), PublicKey: ""},
+		TnProvider{Name: "Sprint", Uuid: uuid.New().String(), PublicKey: ""},
+		TnProvider{Name: "Orange", Uuid: uuid.New().String(), PublicKey: ""},
+		TnProvider{Name: "Tigo Une", Uuid: uuid.New().String(), PublicKey: ""},
 	}
 
 	i := 0
-	for i < len(enterprise) {
+	for i < len(tnProvider) {
 		fmt.Println("i is ", i)
-		enterpriseAsBytes, _ := json.Marshal(enterprise[i])
-		APIstub.PutState(strconv.Itoa(i + 1), enterpriseAsBytes)
-		fmt.Println("Added Enterprise", enterprise[i])
+		tnProviderAsBytes, _ := json.Marshal(tnProvider[i])
+		APIstub.PutState(strconv.Itoa(i+1), tnProviderAsBytes)
+		fmt.Println("Added Vetter", tnProvider[i])
 		i = i + 1
 	}
 
@@ -136,8 +134,8 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 }
 
 /*
- * The queryAllItemss method *
-allows for assessing all the records added to the ledger(all Telephonenumber entries)
+ * The queryAllItems method *
+allows for assessing all the records added to the ledger(all TnProvider entries)
 This method does not take any arguments. Returns JSON string containing results.
 */
 func (s *SmartContract) queryAllItems(APIstub shim.ChaincodeStubInterface) sc.Response {

@@ -18,25 +18,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"github.com/google/uuid"
-
 	"github.com/hyperledger/fabric-chaincode-go/shim"
 	sc "github.com/hyperledger/fabric-protos-go/peer"
+	"strconv"
 )
 
 // Define the Smart Contract structure
 type SmartContract struct {
 }
 
-/* Define Enterprise structure, with 4 properties.
+/* Define Telephonenumber structure, with 3 properties.
 Structure tags are used by encoding/json library
 */
-type Enterprise struct {
-	Name string `json:"name"`
-	Uuid string `json:"uuid"`
-	VettedBy string `json:"vettedBy"`
-	PublicKey string `json:"publicKey"`
+type Telephonenumber struct {
+	Phonenumber string `json:"tn"`
+	UseIntent string `json:"use_intent"`
+	AssignedTo string `json:"assignedTo"`
+	Owner string `json:"owner"`
 }
 
 /*
@@ -59,17 +57,17 @@ func (s *SmartContract) queryItem(APIstub shim.ChaincodeStubInterface, args []st
 
 
 /*
- * The recordEnterprise method *
-Can be used to add new Enterprises to the DLT.s
+ * The recordTelephonenumber method *
+Can be used to add new Telephonenumbers to the DLT.s
 */
-func (s *SmartContract) recordEnterprise(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) recordTelephonenumber(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	var newEnterprise = Enterprise{ Name: args[1], Uuid: args[2], VettedBy: "", PublicKey: args[3] }
+	var newTelephonenumber = Telephonenumber{ Phonenumber: args[1], UseIntent: args[2], AssignedTo: args[3], Owner: args[4]}
 
-	newEnterpriseAsBytes, _ := json.Marshal(newEnterprise)
-	err := APIstub.PutState(args[0], newEnterpriseAsBytes)
+	newTelephonenumberAsBytes, _ := json.Marshal(newTelephonenumber)
+	err := APIstub.PutState(args[0], newTelephonenumberAsBytes)
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Failed to record new Enterprise: %s", args[0]))
+		return shim.Error(fmt.Sprintf("Failed to record new Telephonenumber: %s", args[0]))
 	}
 
 	return shim.Success(nil)
@@ -99,8 +97,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.queryItem(APIstub, args)
 	} else if function == "initLedger" {
 		return s.initLedger(APIstub)
-	} else if function == "recordEnterprise" {
-		return s.recordEnterprise(APIstub, args)
+	} else if function == "recordTelephonenumber" {
+		return s.recordTelephonenumber(APIstub, args)
 	} else if function == "queryAllItems" {
 		return s.queryAllItems(APIstub)
 	}
@@ -111,24 +109,23 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 
 /*
  * The initLedger method *
-Will add test data (5 Enterprises)to our network
+Will add test data (5 Telephonenumber)to our network
 */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
-
-	enterprise := []Enterprise{
-		Enterprise{Name: "Exito", Uuid: uuid.New().String(), VettedBy: "1", PublicKey: ""},
-		Enterprise{Name: "Carulla", Uuid: uuid.New().String(), VettedBy: "2", PublicKey: ""},
-		Enterprise{Name: "D1", Uuid: uuid.New().String(), VettedBy: "3", PublicKey: ""},
-		Enterprise{Name: "JustoYBueno", Uuid: uuid.New().String(), VettedBy: "4", PublicKey: ""},
-		Enterprise{Name: "Jumbo", Uuid: uuid.New().String(), VettedBy: "5", PublicKey: ""},
+	telephonenumber := []Telephonenumber{
+		Telephonenumber{Phonenumber: "+573202366543", UseIntent: "good", AssignedTo: "1", Owner: "1"},
+		Telephonenumber{Phonenumber: "+4419428683", UseIntent: "good", AssignedTo: "2", Owner: "2"},
+		Telephonenumber{Phonenumber: "+4934128756", UseIntent: "good", AssignedTo: "3", Owner: "3"},
+		Telephonenumber{Phonenumber: "+491512899154", UseIntent: "good", AssignedTo: "4", Owner: "4"},
+		Telephonenumber{Phonenumber: "+34563412421", UseIntent: "bad", AssignedTo: "5", Owner: "5"},
 	}
 
 	i := 0
-	for i < len(enterprise) {
+	for i < len(telephonenumber) {
 		fmt.Println("i is ", i)
-		enterpriseAsBytes, _ := json.Marshal(enterprise[i])
-		APIstub.PutState(strconv.Itoa(i + 1), enterpriseAsBytes)
-		fmt.Println("Added Enterprise", enterprise[i])
+		telephonenumberAsBytes, _ := json.Marshal(telephonenumber[i])
+		APIstub.PutState(strconv.Itoa(i+1), telephonenumberAsBytes)
+		fmt.Println("Added Telephonenumber", telephonenumber[i])
 		i = i + 1
 	}
 
@@ -136,7 +133,7 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 }
 
 /*
- * The queryAllItemss method *
+ * The queryAllItems method *
 allows for assessing all the records added to the ledger(all Telephonenumber entries)
 This method does not take any arguments. Returns JSON string containing results.
 */

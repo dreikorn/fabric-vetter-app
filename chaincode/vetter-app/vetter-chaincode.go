@@ -9,11 +9,11 @@
 
 package main
 
-/* Imports  
+/* Imports
 * 5 utility libraries for handling bytes, reading and writing JSON,
 formatting, and string manipulation  
 * 2 specific Hyperledger Fabric specific libraries for Smart Contracts  
-*/ 
+*/
 import (
 	"bytes"
 	"encoding/json"
@@ -63,10 +63,6 @@ Can be used to add new Vetters to the DLT.s
 */
 func (s *SmartContract) recordVetter(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
-	}
-
 	var newVetter = Vetter{ Name: args[1], Uuid: args[2], PublicKey: args[3] }
 
 	newVetterAsBytes, _ := json.Marshal(newVetter)
@@ -114,7 +110,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 
 /*
  * The initLedger method *
-Will add test data (4 Vetters)to our network
+Will add test data (5 Vetters)to our network
  */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	vetter := []Vetter{
