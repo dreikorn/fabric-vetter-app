@@ -6,7 +6,10 @@
 #
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
-CHANNEL_NAME=mychannel
+CHANNEL1_NAME=vetter
+CHANNEL2_NAME=enterprise
+CHANNEL3_NAME=telephonenumber
+CHANNEL4_NAME=tnprovider
 
 # remove previous crypto material and config transactions
 rm -fr config/*
@@ -26,15 +29,51 @@ if [ "$?" -ne 0 ]; then
   exit 1
 fi
 
-# generate channel configuration transaction
-configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
+# generate channel configuration transactions
+configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL1_NAME}_channel.tx -channelID $CHANNEL1_NAME
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate channel configuration transaction..."
+  exit 1
+fi
+
+configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL2_NAME}_channel.tx -channelID $CHANNEL2_NAME
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate channel configuration transaction..."
+  exit 1
+fi
+
+configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL3_NAME}_channel.tx -channelID $CHANNEL3_NAME
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate channel configuration transaction..."
+  exit 1
+fi
+
+configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL4_NAME}_channel.tx -channelID $CHANNEL4_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
 # generate anchor peer transaction
-configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL1_NAME}_Org1MSPanchors.tx -channelID $CHANNEL1_NAME -asOrg Org1MSP
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate anchor peer update for Org1MSP..."
+  exit 1
+fi
+
+configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL2_NAME}_Org1MSPanchors.tx -channelID $CHANNEL2_NAME -asOrg Org1MSP
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate anchor peer update for Org1MSP..."
+  exit 1
+fi
+
+configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL3_NAME}_Org1MSPanchors.tx -channelID $CHANNEL3_NAME -asOrg Org1MSP
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate anchor peer update for Org1MSP..."
+  exit 1
+fi
+
+configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL4_NAME}_Org1MSPanchors.tx -channelID $CHANNEL4_NAME -asOrg Org1MSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for Org1MSP..."
   exit 1

@@ -5,15 +5,15 @@
 
  This code is based on code written by the Hyperledger Fabric community.
   Original code can be found here: https://github.com/hyperledger/fabric-samples/blob/release/chaincode/fabcar/fabcar.go
- */
+*/
 
 package main
 
-/* Imports  
+/* Imports
 * 5 utility libraries for handling bytes, reading and writing JSON,
-formatting, and string manipulation  
-* 2 specific Hyperledger Fabric specific libraries for Smart Contracts  
-*/ 
+formatting, and string manipulation
+* 2 specific Hyperledger Fabric specific libraries for Smart Contracts
+*/
 import (
 	"bytes"
 	"encoding/json"
@@ -32,9 +32,10 @@ type SmartContract struct {
 /* Define Vetter structure, with 3 properties.
 Structure tags are used by encoding/json library
 */
-type Vetter struct {
+type Enterprise struct {
 	Name string `json:"name"`
 	Uuid string `json:"uuid"`
+	VettedBy string `json:"vettedBy"`
 	PublicKey string `json:"publicKey"`
 }
 
@@ -61,18 +62,18 @@ func (s *SmartContract) queryItem(APIstub shim.ChaincodeStubInterface, args []st
  * The recordVetter method *
 Can be used to add new Vetters to the DLT.s
 */
-func (s *SmartContract) recordVetter(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) recordEnterprise(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
-	var newVetter = Vetter{ Name: args[1], Uuid: args[2], PublicKey: args[3] }
+	var newEnterprise = Enterprise{ Name: args[1], Uuid: args[2], VettedBy: "", PublicKey: args[3] }
 
-	newVetterAsBytes, _ := json.Marshal(newVetter)
-	err := APIstub.PutState(args[0], newVetterAsBytes)
+	newEnterpriseAsBytes, _ := json.Marshal(newEnterprise)
+	err := APIstub.PutState(args[0], newEnterpriseAsBytes)
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Failed to record new Vetter: %s", args[0]))
+		return shim.Error(fmt.Sprintf("Failed to record new Enterprise: %s", args[0]))
 	}
 
 	return shim.Success(nil)
@@ -81,9 +82,9 @@ func (s *SmartContract) recordVetter(APIstub shim.ChaincodeStubInterface, args [
 /*
  * The Init method *
  called when the Smart Contract "vetter-chaincode" is instantiated by the network
- * Best practice is to have any Ledger initialization in separate function 
+ * Best practice is to have any Ledger initialization in separate function
  -- see initLedger()
- */
+*/
 func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 	return shim.Success(nil)
 }
@@ -92,7 +93,7 @@ func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
  * The Invoke method *
  called when an application requests to run the Smart Contract "vetter-chaincode"
  The app also specifies the specific smart contract function to call with args
- */
+*/
 func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 	// Retrieve the requested Smart Contract function and arguments
@@ -102,8 +103,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.queryItem(APIstub, args)
 	} else if function == "initLedger" {
 		return s.initLedger(APIstub)
-	} else if function == "recordVetter" {
-		return s.recordVetter(APIstub, args)
+	} else if function == "recordEnterprise" {
+		return s.recordEnterprise(APIstub, args)
 	} else if function == "queryAllItems" {
 		return s.queryAllItems(APIstub)
 	}
@@ -115,22 +116,23 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 /*
  * The initLedger method *
 Will add test data (4 Vetters)to our network
- */
+*/
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
-	vetter := []Vetter{
-		Vetter{Name: "NKWD", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "MfS", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "KGB", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "OSS", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "ABCD", Uuid: uuid.New().String(), PublicKey: ""},
+
+	enterprise := []Enterprise{
+		Enterprise{Name: "Exito", Uuid: uuid.New().String(), VettedBy: "1", PublicKey: ""},
+		Enterprise{Name: "Carulla", Uuid: uuid.New().String(), VettedBy: "2", PublicKey: ""},
+		Enterprise{Name: "D1", Uuid: uuid.New().String(), VettedBy: "3", PublicKey: ""},
+		Enterprise{Name: "JustoYBueno", Uuid: uuid.New().String(), VettedBy: "4", PublicKey: ""},
+		Enterprise{Name: "Jumbo", Uuid: uuid.New().String(), VettedBy: "5", PublicKey: ""},
 	}
 
 	i := 0
-	for i < len(vetter) {
+	for i < len(enterprise) {
 		fmt.Println("i is ", i)
-		vetterAsBytes, _ := json.Marshal(vetter[i])
-		APIstub.PutState(strconv.Itoa(i+1), vetterAsBytes)
-		fmt.Println("Added Vetter", vetter[i])
+		enterpriseAsBytes, _ := json.Marshal(enterprise[i])
+		APIstub.PutState(strconv.Itoa(i + 1), enterpriseAsBytes)
+		fmt.Println("Added Enterprise", enterprise[i])
 		i = i + 1
 	}
 
@@ -140,8 +142,8 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 /*
  * The queryAllVetters method *
 allows for assessing all the records added to the ledger(all Vetter entries)
-This method does not take any arguments. Returns JSON string containing results. 
- */
+This method does not take any arguments. Returns JSON string containing results.
+*/
 func (s *SmartContract) queryAllItems(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 	startKey := "0"
@@ -187,9 +189,9 @@ func (s *SmartContract) queryAllItems(APIstub shim.ChaincodeStubInterface) sc.Re
 
 /*
  * main function *
-calls the Start function 
+calls the Start function
 The main function starts the chaincode in the container during instantiation.
- */
+*/
 func main() {
 
 	// Create a new Smart Contract
