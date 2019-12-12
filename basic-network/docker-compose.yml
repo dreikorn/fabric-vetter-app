@@ -117,6 +117,8 @@ services:
         - /var/run/:/host/var/run/
         - ./../chaincode/vetter-app/:/opt/gopath/src/github.com/vetter-app/
         - ./../chaincode/enterprise-app/:/opt/gopath/src/github.com/enterprise-app/
+        - ./../chaincode/telephonenumber-app/:/opt/gopath/src/github.com/telephonenumber-app/
+        - ./../chaincode/tnprovider-app/:/opt/gopath/src/github.com/tnprovider-app/
         - ./../chaincode/gopath/src/github.com/:/opt/gopath/src/github.com/
         - ./../chaincode/gopath/src/google.golang.org/:/opt/gopath/src/google.golang.org/
         - ./../chaincode/gopath/src/golang.org/x/:/opt/gopath/src/golang.org/x/
