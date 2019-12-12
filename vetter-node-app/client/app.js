@@ -26,48 +26,16 @@ app.controller('appController', function($scope, appFactory){
 					return parseFloat(a.Key) - parseFloat(b.Key);
 				});
 				$scope[itemType] = array;
-				console.log("dumb");
 			});
 		});
-	}
+	};
 
-	$scope.queryTuna = function(){
+	$scope.recordEnterprise = function(){
 
-		var id = $scope.tuna_id;
-
-		appFactory.queryTuna(id, function(data){
-			$scope.query_tuna = data;
-
-			if ($scope.query_tuna == "Could not locate tuna"){
-				console.log()
-				$("#error_query").show();
-			} else{
-				$("#error_query").hide();
-			}
-		});
-	}
-
-	$scope.recordTuna = function(){
-
-		appFactory.recordTuna($scope.tuna, function(data){
-			$scope.create_tuna = data;
+		appFactory.recordEnterprise($scope.enterprise, function(data){
 			$("#success_create").show();
 		});
-	}
-
-	$scope.changeHolder = function(){
-
-		appFactory.changeHolder($scope.holder, function(data){
-			$scope.change_holder = data;
-			if ($scope.change_holder == "Error: no tuna catch found"){
-				$("#error_holder").show();
-				$("#success_holder").hide();
-			} else{
-				$("#success_holder").show();
-				$("#error_holder").hide();
-			}
-		});
-	}
+	};
 
 });
 
@@ -83,31 +51,15 @@ app.factory('appFactory', function($http){
 		});
 	}
 
-	factory.queryTuna = function(id, callback){
-    	$http.get('/get_tuna/'+id).success(function(output){
+	factory.recordEnterprise = function(data, callback){
+
+		var enterprise = data.id + "-" + data['name'] + "-" + data['publicKey'];
+
+    	$http.get('/add_enterprise/'+enterprise).success(function(output){
 			callback(output)
 		});
 	}
 
-	factory.recordTuna = function(data, callback){
-
-		data.location = data.longitude + ", "+ data.latitude;
-
-		var tuna = data.id + "-" + data.location + "-" + data.timestamp + "-" + data.holder + "-" + data.vessel;
-
-    	$http.get('/add_tuna/'+tuna).success(function(output){
-			callback(output)
-		});
-	}
-
-	factory.changeHolder = function(data, callback){
-
-		var holder = data.id + "-" + data.name;
-
-    	$http.get('/change_holder/'+holder).success(function(output){
-			callback(output)
-		});
-	}
 
 	return factory;
 });

@@ -132,27 +132,37 @@
         </tr>
       </table>
 
-      <div class="form-group">
-        <label>Create Tuna Record</label>
-        <h5 style="color:green;margin-bottom:2%" id="success_create">Success! Tx ID: {{create_tuna}}</h5>
-        <br>
-        Enter catch id: <input class="form-control" type="text" placeholder="Ex: 11" ng-model="tuna.id">
-        Enter name of vessel: <input class="form-control" type="text" placeholder="Ex: 0239L" ng-model="tuna.vessel">
-        Enter longitude: <input id="createName" class="form-control" type="text" placeholder="Ex: 28.012" ng-model="tuna.longitude"> 
-        Enter latitude: <input id="createName" class="form-control" type="text" placeholder="Ex: 150.405" ng-model="tuna.latitude">
-        Enter timestamp: <input class="form-control" type="text" placeholder="Ex: 4982342301" ng-model="tuna.timestamp">
-        Enter name of holder: <input class="form-control" type="text" placeholder="Ex: Hansel" ng-model="tuna.holder">
-        <input id="createSubmit" type="submit" value="Create" class="btn btn-primary" ng-click="recordTuna()"> 
-      </div>
+      <label>Telephonenumbers</label>
+
+      <table id="all_telephonenumbers" class="table" align="center">
+
+        <tr>
+          <th>#</th>
+          <th>Telephonenumber</th>
+          <th>Use Intent</th>
+          <th>Assigned To Enterprise #</th>
+          <th>Owner To Enterprise #</th>
+        </tr>
+
+        <tr ng-repeat="tnumber in telephonenumber">
+          <td>{{tnumber["Key"]}}</td>
+          <td>{{tnumber["tn"]}}</td>
+          <td>{{tnumber["use_intent"]}}</td>
+          <td>{{tnumber["assignedTo"]}}</td>
+          <td>{{tnumber["owner"]}}</td>
+        </tr>
+      </table>
 
       <div class="form-group">
-        <label>Change Tuna Holder</label><br>
-        <h5 style="color:green;margin-bottom:2%" id="success_holder">Success! Tx ID: {{change_holder}}</h5>
-        <h5 style="color:red;margin-bottom:2%" id="error_holder">Error: Please enter a valid Tuna Id</h5>
-        Enter a catch id between 1 and 10: <input class="form-control" name="assetSelect" placeholder="Ex: 1" ng-model="holder.id">
-        Enter name of new holder: <input class="form-control" name="assetSelect" placeholder="Ex: Barry" ng-model="holder.name">
-        <input id="transferSubmit" type="submit" value="Change" class="btn btn-primary" ng-click="changeHolder()">
+        <label>Create Enterprise Record</label>
+        <h5 style="color:green;margin-bottom:2%" id="success_create">Success! Tx ID: {{create_enterprise}}</h5>
+        <br>
+        Enter Enterprise id: <input class="form-control" type="text" placeholder="Ex: 11" ng-model="enterprise.id">
+        Enter name of Enterprise: <input class="form-control" type="text" placeholder="Company Name" ng-model="enterprise['name']">
+        Enter Enterprise Public Key: <input class="form-control" type="text" placeholder="Public Key Value" ng-model="enterprise['publicKey']">
+        <input id="createSubmit" type="submit" value="Create" class="btn btn-primary" ng-click="recordEnterprise()">
       </div>
+
 
     </div>
   </body>

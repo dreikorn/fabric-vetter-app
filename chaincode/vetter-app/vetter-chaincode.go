@@ -114,11 +114,11 @@ Will add test data (5 Vetters)to our network
  */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	vetter := []Vetter{
-		Vetter{Name: "NKWD", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "MfS", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "KGB", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "OSS", Uuid: uuid.New().String(), PublicKey: ""},
-		Vetter{Name: "ABCD", Uuid: uuid.New().String(), PublicKey: ""},
+		Vetter{Name: "NKWD", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		Vetter{Name: "MfS", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		Vetter{Name: "KGB", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		Vetter{Name: "OSS", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		Vetter{Name: "ABCD", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
 	}
 
 	i := 0
