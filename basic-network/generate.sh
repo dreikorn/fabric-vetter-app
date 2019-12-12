@@ -23,58 +23,58 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # generate genesis block for orderer
-configtxgen -profile OneOrgOrdererGenesis -outputBlock ./config/genesis.block
+configtxgen -profile OrdererGenesis -outputBlock ./config/genesis.block
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
   exit 1
 fi
 
 # generate channel configuration transactions
-configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL1_NAME}_channel.tx -channelID $CHANNEL1_NAME
+configtxgen -profile OrgOneChannel -outputCreateChannelTx ./config/${CHANNEL1_NAME}_channel.tx -channelID $CHANNEL1_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
-configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL2_NAME}_channel.tx -channelID $CHANNEL2_NAME
+configtxgen -profile OrgTwoChannel -outputCreateChannelTx ./config/${CHANNEL2_NAME}_channel.tx -channelID $CHANNEL2_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
-configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL3_NAME}_channel.tx -channelID $CHANNEL3_NAME
+configtxgen -profile OrgThreeChannel -outputCreateChannelTx ./config/${CHANNEL3_NAME}_channel.tx -channelID $CHANNEL3_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
-configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/${CHANNEL4_NAME}_channel.tx -channelID $CHANNEL4_NAME
+configtxgen -profile OrgThreeChannel -outputCreateChannelTx ./config/${CHANNEL4_NAME}_channel.tx -channelID $CHANNEL4_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
 # generate anchor peer transaction
-configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL1_NAME}_Org1MSPanchors.tx -channelID $CHANNEL1_NAME -asOrg Org1MSP
+configtxgen -profile OrgOneChannel -outputAnchorPeersUpdate ./config/${CHANNEL1_NAME}_Org1MSPanchors.tx -channelID $CHANNEL1_NAME -asOrg Org1MSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for Org1MSP..."
   exit 1
 fi
 
-configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL2_NAME}_Org1MSPanchors.tx -channelID $CHANNEL2_NAME -asOrg Org1MSP
+configtxgen -profile OrgTwoChannel -outputAnchorPeersUpdate ./config/${CHANNEL2_NAME}_Org2MSPanchors.tx -channelID $CHANNEL2_NAME -asOrg Org2MSP
 if [ "$?" -ne 0 ]; then
-  echo "Failed to generate anchor peer update for Org1MSP..."
+  echo "Failed to generate anchor peer update for Org2MSP..."
   exit 1
 fi
 
-configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL3_NAME}_Org1MSPanchors.tx -channelID $CHANNEL3_NAME -asOrg Org1MSP
+configtxgen -profile OrgThreeChannel -outputAnchorPeersUpdate ./config/${CHANNEL3_NAME}_Org3MSPanchors.tx -channelID $CHANNEL3_NAME -asOrg Org3MSP
 if [ "$?" -ne 0 ]; then
-  echo "Failed to generate anchor peer update for Org1MSP..."
+  echo "Failed to generate anchor peer update for Org3MSP..."
   exit 1
 fi
 
-configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/${CHANNEL4_NAME}_Org1MSPanchors.tx -channelID $CHANNEL4_NAME -asOrg Org1MSP
+configtxgen -profile OrgThreeChannel -outputAnchorPeersUpdate ./config/${CHANNEL4_NAME}_Org3MSPanchors.tx -channelID $CHANNEL4_NAME -asOrg Org3MSP
 if [ "$?" -ne 0 ]; then
-  echo "Failed to generate anchor peer update for Org1MSP..."
+  echo "Failed to generate anchor peer update for Org3MSP..."
   exit 1
 fi
