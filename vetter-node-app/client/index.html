@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hyperledger Fabric Tuna Application</title>
+    <title>Hyperledger STIR/SHAKEN DB</title>
     <link rel="icon" href="favicon.png" type="image/gif">
 
     <!-- require jquery and bootstrap scripts -->
@@ -63,57 +63,72 @@
   </head>
   <body ng-app="application" ng-controller="appController">
     <header>
-      <div id="left_header">Hyperledger Fabric Tuna Application</div>
-      <i id="right_header">Example Blockchain Application for Introduction to Hyperledger Fabric LFS171x</i>
+      <div id="left_header">Hyperledger STIR/SHAKEN DB</div>
+      <i id="right_header">Allows to store and query all main business entities in Hyperledger DLT</i>
     </header>
 
     <div id="body">
       <div class="form-group">
-        <label>Query All Tuna Catches</label>
-        <p><input id="queryAllTuna" type="submit" value="Query" class="btn btn-primary" ng-click="queryAllTuna()"></p>
+        <label>Query All Business Objects</label>
+        <p><input id="queryAllTuna" type="submit" value="Query" class="btn btn-primary" ng-click="queryAllItems()"></p>
       </div>
+
+      <label>Vetters</label>
  
-      <table id="all_tuna" class="table" align="center">
+      <table id="all_vetters" class="table" align="center">
 
         <tr>
-          <th>ID</th>
-          <th>Timestamp</th>
-          <th>Holder</th>
-          <th>Catch Location <br>(Longitude, Latitude)</th>
-          <th>Vessel</th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Public Key</th>
+          <th>UUID</th>
         </tr>
 
-        <tr ng-repeat="tuna in all_tuna">
-          <td>{{tuna.Key}}</td>
-          <td>{{tuna.timestamp}}</td>
-          <td>{{tuna.holder}}</td>
-          <td>{{tuna.location}}</td>
-          <td>{{tuna.vessel}}</td>
+        <tr ng-repeat="vet in vetter">
+          <td>{{vet["Key"]}}</td>
+          <td>{{vet["name"]}}</td>
+          <td>{{vet["publicKey"]}}</td>
+          <td>{{vet["uuid"]}}</td>
         </tr>
       </table>
 
-      <div class="form-group">
-        <label>Query a Specific Tuna Catch</label><br>
-        <h5 style="color:red;margin-bottom:2%" id="error_query">Error: Please enter a valid Tuna Id</h5>
-        
-        Enter a catch number: <input id="createName" class="form-control" type="text" placeholder="Ex: 3" ng-model="tuna_id">
-        <input id="querySubmit" type="submit" value="Query" class="btn btn-primary" ng-click="queryTuna()">
-      </div>
+      <label>Enterprises</label>
 
-      <table id="query_tuna" class="table" align="center">
+      <table id="all_enterprises" class="table" align="center">
 
         <tr>
-          <th>Timestamp</th>
-          <th>Holder</th>
-          <th>Catch Location <br>(Longitude, Latitude)</th>
-          <th>Vessel</th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Vetted By Vetter #</th>
+          <th>Public Key</th>
+          <th>UUID</th>
         </tr>
 
+        <tr ng-repeat="enterpr in enterprise">
+          <td>{{enterpr["Key"]}}</td>
+          <td>{{enterpr["name"]}}</td>
+          <td>{{enterpr["vettedBy"]}}</td>
+          <td>{{enterpr["publicKey"]}}</td>
+          <td>{{enterpr["uuid"]}}</td>
+        </tr>
+      </table>
+
+      <label>TN Providers</label>
+
+      <table id="all_tnproviders" class="table" align="center">
+
         <tr>
-          <td>{{query_tuna.timestamp}}</td>
-          <td>{{query_tuna.holder}}</td>
-          <td>{{query_tuna.location}}</td>
-          <td>{{query_tuna.vessel}}</td>
+          <th>#</th>
+          <th>Name</th>
+          <th>Public Key</th>
+          <th>UUID</th>
+        </tr>
+
+        <tr ng-repeat="tnprov in tnprovider">
+          <td>{{tnprov["Key"]}}</td>
+          <td>{{tnprov["name"]}}</td>
+          <td>{{tnprov["publicKey"]}}</td>
+          <td>{{tnprov["uuid"]}}</td>
         </tr>
       </table>
 

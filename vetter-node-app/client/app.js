@@ -12,19 +12,22 @@ app.controller('appController', function($scope, appFactory){
 	$("#error_holder").hide();
 	$("#error_query").hide();
 	
-	$scope.queryAllTuna = function(){
+	$scope.queryAllItems = function(){
 
-		appFactory.queryAllTuna(function(data){
-			var array = [];
-			for (var i = 0; i < data.length; i++){
-				parseInt(data[i].Key);
-				data[i].Record.Key = parseInt(data[i].Key);
-				array.push(data[i].Record);
-			}
-			array.sort(function(a, b) {
-			    return parseFloat(a.Key) - parseFloat(b.Key);
+		["vetter", "enterprise", "telephonenumber", "tnprovider"].forEach(function (itemType) {
+			appFactory.queryAllItems(itemType, function(data){
+				var array = [];
+				for (var i = 0; i < data.length; i++){
+					parseInt(data[i].Key);
+					data[i].Record.Key = parseInt(data[i].Key);
+					array.push(data[i].Record);
+				}
+				array.sort(function(a, b) {
+					return parseFloat(a.Key) - parseFloat(b.Key);
+				});
+				$scope[itemType] = array;
+				console.log("dumb");
 			});
-			$scope.all_tuna = array;
 		});
 	}
 
@@ -73,9 +76,9 @@ app.factory('appFactory', function($http){
 	
 	var factory = {};
 
-    factory.queryAllTuna = function(callback){
+    factory.queryAllItems = function(itemType, callback){
 
-    	$http.get('/get_all_tuna/').success(function(output){
+    	$http.get(`/get_all_items/${itemType}`).success(function(output){
 			callback(output)
 		});
 	}
