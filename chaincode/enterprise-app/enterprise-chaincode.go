@@ -64,7 +64,7 @@ Can be used to add new Enterprises to the DLT.s
 */
 func (s *SmartContract) recordEnterprise(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	var newEnterprise = Enterprise{ Name: args[1], Uuid: args[2], VettedBy: "", PublicKey: args[3] }
+	var newEnterprise = Enterprise{ Name: args[1], Uuid: uuid.New().String(), VettedBy: "", PublicKey: args[2] }
 
 	newEnterpriseAsBytes, _ := json.Marshal(newEnterprise)
 	err := APIstub.PutState(args[0], newEnterpriseAsBytes)
@@ -116,11 +116,11 @@ Will add test data (5 Enterprises)to our network
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 	enterprise := []Enterprise{
-		Enterprise{Name: "Exito", Uuid: uuid.New().String(), VettedBy: "1", PublicKey: ""},
-		Enterprise{Name: "Carulla", Uuid: uuid.New().String(), VettedBy: "2", PublicKey: ""},
-		Enterprise{Name: "D1", Uuid: uuid.New().String(), VettedBy: "3", PublicKey: ""},
-		Enterprise{Name: "JustoYBueno", Uuid: uuid.New().String(), VettedBy: "4", PublicKey: ""},
-		Enterprise{Name: "Jumbo", Uuid: uuid.New().String(), VettedBy: "5", PublicKey: ""},
+		Enterprise{Name: "Exito", Uuid: uuid.New().String(), VettedBy: "1", PublicKey: "Auto Generated Entry"},
+		Enterprise{Name: "Carulla", Uuid: uuid.New().String(), VettedBy: "2", PublicKey: "Auto Generated Entry"},
+		Enterprise{Name: "D1", Uuid: uuid.New().String(), VettedBy: "3", PublicKey: "Auto Generated Entry"},
+		Enterprise{Name: "JustoYBueno", Uuid: uuid.New().String(), VettedBy: "4", PublicKey: "Auto Generated Entry"},
+		Enterprise{Name: "Jumbo", Uuid: uuid.New().String(), VettedBy: "5", PublicKey: "Auto Generated Entry"},
 	}
 
 	i := 0

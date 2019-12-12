@@ -114,11 +114,11 @@ Will add test data (5 TnProviders)to our network
 */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	tnProvider := []TnProvider{
-		TnProvider{Name: "America Movil", Uuid: uuid.New().String(), PublicKey: ""},
-		TnProvider{Name: "Telefonica", Uuid: uuid.New().String(), PublicKey: ""},
-		TnProvider{Name: "Sprint", Uuid: uuid.New().String(), PublicKey: ""},
-		TnProvider{Name: "Orange", Uuid: uuid.New().String(), PublicKey: ""},
-		TnProvider{Name: "Tigo Une", Uuid: uuid.New().String(), PublicKey: ""},
+		TnProvider{Name: "America Movil", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		TnProvider{Name: "Telefonica", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		TnProvider{Name: "Sprint", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		TnProvider{Name: "Orange", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
+		TnProvider{Name: "Tigo Une", Uuid: uuid.New().String(), PublicKey: "Auto Generated Entry"},
 	}
 
 	i := 0
