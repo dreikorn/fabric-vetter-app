@@ -39,6 +39,7 @@ type Enterprise struct {
 	VettedBy string `json:"vettedBy"`
 	PublicKey string `json:"publicKey"`
 	Signature string `json:"signature"`
+	Proposal string `json:"proposal"`
 }
 
 /*
@@ -68,11 +69,13 @@ func (s *SmartContract) recordEnterprise(APIstub shim.ChaincodeStubInterface, ar
 
 	proposal, error := APIstub.GetSignedProposal()
 	signature := ""
+	proposalString := ""
 	if error == nil {
 		signature = base64.StdEncoding.EncodeToString(proposal.Signature)
+		proposalString = string(proposal.ProposalBytes)
 	}
 
-	var newEnterprise = Enterprise{ Name: args[1], Uuid: uuid.New().String(), VettedBy: "", PublicKey: args[2], Signature: signature}
+	var newEnterprise = Enterprise{ Name: args[1], Uuid: uuid.New().String(), VettedBy: "", PublicKey: args[2], Signature: signature, Proposal: proposalString}
 
 	newEnterpriseAsBytes, _ := json.Marshal(newEnterprise)
 	err := APIstub.PutState(args[0], newEnterpriseAsBytes)

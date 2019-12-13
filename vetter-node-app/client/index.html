@@ -103,6 +103,7 @@
           <th>Public Key</th>
           <th>UUID</th>
           <th>Signature</th>
+          <th>Proposal</th>
         </tr>
 
         <tr ng-repeat="enterpr in enterprise">
@@ -111,7 +112,8 @@
           <td>{{enterpr["vettedBy"]}}</td>
           <td>{{enterpr["publicKey"]}}</td>
           <td>{{enterpr["uuid"]}}</td>
-          <td>{{enterpr["signature"]}}</td>
+          <td style="max-width: 300px;word-break: break-word">{{enterpr["signature"]}}</td>
+          <td style="max-width: 300px;word-break: break-word">{{enterpr["proposal"]}}</td>
         </tr>
       </table>
 
