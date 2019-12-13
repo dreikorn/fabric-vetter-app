@@ -4,6 +4,9 @@ var vetters = require('./controller.js');
 
 module.exports = function(app){
 
+  app.get('/add_item/:itemType/:enterprise', function(req, res){
+    vetters.add_item(req, res);
+  });
   app.get('/add_enterprise/:enterprise', function(req, res){
     vetters.add_enterprise(req, res);
   });
