@@ -16,6 +16,7 @@ formatting, and string manipulation
 */
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -37,6 +38,7 @@ type Enterprise struct {
 	Uuid string `json:"uuid"`
 	VettedBy string `json:"vettedBy"`
 	PublicKey string `json:"publicKey"`
+	Signature string `json:"signature"`
 }
 
 /*
@@ -64,10 +66,17 @@ Can be used to add new Enterprises to the DLT.s
 */
 func (s *SmartContract) recordEnterprise(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	var newEnterprise = Enterprise{ Name: args[1], Uuid: uuid.New().String(), VettedBy: "", PublicKey: args[2] }
+	proposal, error := APIstub.GetSignedProposal()
+	signature := ""
+	if error == nil {
+		signature = base64.StdEncoding.EncodeToString(proposal.Signature)
+	}
+
+	var newEnterprise = Enterprise{ Name: args[1], Uuid: uuid.New().String(), VettedBy: "", PublicKey: args[2], Signature: signature}
 
 	newEnterpriseAsBytes, _ := json.Marshal(newEnterprise)
 	err := APIstub.PutState(args[0], newEnterpriseAsBytes)
+
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to record new Enterprise: %s", args[0]))
 	}

@@ -33,6 +33,7 @@ app.controller('appController', function($scope, appFactory){
 	$scope.recordEnterprise = function(){
 
 		appFactory.recordEnterprise($scope.enterprise, function(data){
+			$scope.create_enterprise = data;
 			$("#success_create").show();
 		});
 	};
