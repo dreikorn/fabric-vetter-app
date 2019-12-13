@@ -149,6 +149,8 @@ Profiles:
             SampleConsortium:
                 Organizations:
                     - *Org1
+                    - *Org2
+                    - *Org3
     OrgOneChannel:
         Consortium: SampleConsortium
         Application:
