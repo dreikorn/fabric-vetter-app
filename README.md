@@ -21,3 +21,16 @@ If you want to deploy future chaincode changes do
 	docker rm -f $(docker ps -aq)
 	docker rmi of all containers that have a long hash in their name
 	#Rerun ./startFabric.sh
+
+Run the init scripts
+
+    npm install
+    
+for the nodeJS app and afterwards perform
+
+    ./registerAdmin.js
+    ./registerUser.js
+    
+And start the server with
+    
+    ./server.js
